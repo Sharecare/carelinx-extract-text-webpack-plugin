@@ -8,6 +8,8 @@ var NodeTargetPlugin = require("webpack/lib/node/NodeTargetPlugin");
 var LibraryTemplatePlugin = require("webpack/lib/LibraryTemplatePlugin");
 var SingleEntryPlugin = require("webpack/lib/SingleEntryPlugin");
 var LimitChunkCountPlugin = require("webpack/lib/optimize/LimitChunkCountPlugin");
+var path = require('path');
+	
 module.exports = function(source) {
 	if(this.cacheable) this.cacheable();
 	return source;
@@ -111,10 +113,20 @@ module.exports.pitch = function(request) {
 				} catch(e) {
 					return callback(e);
 				}
-				if(resultSource)
+				if(resultSource) {
+					var filepath = text[0][0];
+					//if(!filepath.match(/\?cssExternal/)) {
+					var path = require('path')
+					var fileName = path.basename(filepath, '.css')
+					var fileNameBase = fileName.split('.')
+					resultSource += "\n/* Externalize CSS and re-include for PostCSS */\n";
+					resultSource += "\n//ignoremodule.exports = require(\"./"+fileNameBase[0]+ ".css\");\n"
+					//}
+					console.log('RETURN', filepath)
 					callback(null, resultSource);
-				else
-					callback();
+				} else {	
+			    	callback();
+				}
 			}.bind(this));
 		} else {
 			this[__dirname]("", query);

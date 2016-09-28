@@ -114,15 +114,22 @@ module.exports.pitch = function(request) {
 					return callback(e);
 				}
 				if(resultSource) {
-					var filepath = text[0][0];
-					//if(!filepath.match(/\?cssExternal/)) {
-					var path = require('path')
-					var fileName = path.basename(filepath, '.css')
-					var fileNameBase = fileName.split('.')
-					resultSource += "\n/* Externalize CSS and re-include for PostCSS */\n";
-					resultSource += "\n//ignoremodule.exports = require(\"./"+fileNameBase[0]+ ".css\");\n"
-					//}
-					console.log('RETURN', filepath)
+					
+					/* if option keepCSSFileReference true
+					    { test: /\.css/, loader: ExtractTextPlugin.extract(
+						  'style-loader',
+						  'css-loader?localIdentName=[hash:base64:5]&what!postcss-loader', {
+							keepCSSFileReference: true
+						  })
+					},*/
+					if(query.keepCSSFileReference) {
+						var filepath = text[0][0];
+						var path = require('path')
+						var fileName = path.basename(filepath, '.css')
+						var fileNameBase = fileName.split('.')
+						resultSource += "\n/* Externalize CSS and re-include for PostCSS */\n";
+						resultSource += "\n//ignoremodule.exports = require(\"./"+fileNameBase[0]+ ".css\");\n"
+					}
 					callback(null, resultSource);
 				} else {	
 			    	callback();

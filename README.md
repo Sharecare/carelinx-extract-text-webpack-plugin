@@ -66,6 +66,22 @@ Creates an extracting loader from an existing loader. Supports loaders of type `
 * `options.publicPath: string` override the `publicPath` setting for this loader
 * `options.keepCSSFileReference: bool` this will add back in a reference to the stripped CSS. Useful for component libraries 
 
+```
+{ test: /\.css/, loader: ExtractTextPlugin.extract(
+  'style-loader',
+  'css-loader?localIdentName=[hash:base64:5]&what!postcss-loader', {
+	keepCSSFileReference: true
+  })
+},
+
+// CSS will de externalized and included as file:
+
+example:
+// removed by extract-text-webpack-plugin
+/* Externalize CSS and re-include for PostCSS */
+module.exports = require("./Block.css");
+```
+
 There is also an `extract` function on the instance. You should use this if you have more than one `ExtractTextPlugin`.
 
 ```javascript

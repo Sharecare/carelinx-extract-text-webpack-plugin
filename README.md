@@ -64,6 +64,7 @@ Creates an extracting loader from an existing loader. Supports loaders of type `
 * `options.loader: string | object | loader[]` _(required)_ the loader(s) that should be used for converting the resource to a css exporting module
 * `options.fallbackLoader: string | object | loader[]` the loader(s) that should be used when the css is not extracted (i.e. in an additional chunk when `allChunks: false`)
 * `options.publicPath: string` override the `publicPath` setting for this loader
+* `options.keepCSSFileReference: bool` this will add back in a reference to the stripped CSS. Useful for component libraries 
 
 There is also an `extract` function on the instance. You should use this if you have more than one `ExtractTextPlugin`.
 
